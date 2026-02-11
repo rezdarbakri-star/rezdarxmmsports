@@ -98,7 +98,7 @@ section {
   z-index: 2;
 }
 
-/* HERO */
+/* ===== HERO ===== */
 .hero { text-align: center; overflow: hidden; }
 
 .hero-badge {
@@ -289,8 +289,8 @@ section {
   animation: scrollDrop 2s ease-in-out infinite;
 }
 
-/* TIMELINE */
-.timeline-section { padding: 6rem 1.5rem; }
+/* ===== TIMELINE ===== */
+.timeline-section { padding: 6rem 1.5rem; min-height: auto; }
 
 .section-header { text-align: center; margin-bottom: 3rem; }
 
@@ -332,6 +332,7 @@ section {
   left: 22px; top: 0; bottom: 0;
   width: 2px;
   background: #151520;
+  z-index: 0;
 }
 
 .timeline-fill {
@@ -339,9 +340,15 @@ section {
   left: 22px; top: 0;
   width: 2px;
   height: 0;
-  background: linear-gradient(to bottom, var(--green), var(--accent) 90%);
-  transition: height 1.5s cubic-bezier(0.16,1,0.3,1);
-  box-shadow: 0 0 12px rgba(0,229,255,0.3);
+  background: linear-gradient(to bottom, var(--green), var(--green));
+  transition: height 1.5s cubic-bezier(0.16,1,0.3,1), background 1s ease;
+  box-shadow: 0 0 12px rgba(0,230,118,0.3);
+  z-index: 0;
+}
+
+.timeline-fill.extended {
+  background: linear-gradient(to bottom, var(--green), var(--accent) 30%, var(--accent));
+  box-shadow: 0 0 16px rgba(0,229,255,0.3);
 }
 
 .t-item {
@@ -361,7 +368,7 @@ section {
   width: 44px; height: 44px;
   position: relative;
   flex-shrink: 0;
-  z-index: 1;
+  z-index: 2;
 }
 
 .t-dot {
@@ -374,14 +381,15 @@ section {
   font-weight: 700;
   font-size: 0.85rem;
   position: relative;
-  transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+  transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
+  background: var(--bg);
 }
 
 .t-item:hover .t-dot.done { transform: scale(1.15); }
-.t-item:hover .t-dot.next { transform: scale(1.2); }
+.t-item:hover .t-dot.unlocked { transform: scale(1.15); }
 
 .t-dot.done {
-  background: var(--green);
+  background: var(--green) !important;
   color: var(--bg);
   box-shadow: 0 0 20px rgba(0,230,118,0.25), 0 0 60px rgba(0,230,118,0.08);
 }
@@ -394,30 +402,25 @@ section {
   border: 1px solid rgba(0,230,118,0.15);
 }
 
-.t-dot.next {
-  background: rgba(0,229,255,0.08);
-  border: 2px solid var(--accent);
-  color: var(--accent);
-  animation: nextGlow 2.5s ease-in-out infinite;
+.t-dot.locked {
+  background: var(--locked) !important;
+  color: #3a3a4a;
+  font-size: 0.7rem;
 }
-
-.t-dot.next::before {
-  content: '';
-  position: absolute;
-  inset: -8px;
-  border-radius: 50%;
-  border: 1px solid rgba(0,229,255,0.1);
-  animation: ringExpand 2.5s ease-in-out infinite;
-}
-
-.t-dot.locked { background: var(--locked); color: #3a3a4a; font-size: 0.7rem; }
 
 .t-dot.pause {
-  background: transparent;
+  background: var(--bg) !important;
   border: 1px dashed #222;
   color: #333;
   font-size: 0.45rem;
   letter-spacing: 2px;
+}
+
+.t-dot.unlocked {
+  background: rgba(0,229,255,0.1) !important;
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  box-shadow: 0 0 15px rgba(0,229,255,0.15);
 }
 
 .t-info { flex: 1; min-width: 0; }
@@ -438,7 +441,7 @@ section {
   font-weight: 600;
   font-size: 0.95rem;
   margin-top: 2px;
-  transition: color 0.3s;
+  transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
 }
 
 .t-title.locked-text { color: #2a2a36; }
@@ -446,26 +449,96 @@ section {
 
 .t-views {
   font-family: 'Space Mono', monospace;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 700;
   flex-shrink: 0;
-  transition: all 0.3s;
+  transition: all 0.5s cubic-bezier(0.16,1,0.3,1);
 }
 
 .t-views.green { color: var(--green); text-shadow: 0 0 20px rgba(0,230,118,0.2); }
 .t-item:hover .t-views.green { text-shadow: 0 0 30px rgba(0,230,118,0.4); transform: scale(1.05); }
-.t-views.cyan { color: var(--accent); }
+.t-views.cyan { color: var(--accent); opacity: 0.7; }
 .t-views.locked-v { color: #1a1a24; }
 
-.t-item.next-item {
-  background: linear-gradient(90deg, rgba(0,229,255,0.03) 0%, transparent 100%);
-  border-radius: 12px;
-  padding: 0.65rem 0.8rem;
-  margin-left: -0.8rem;
-  margin-right: -0.8rem;
+/* ===== UNLOCK DIVIDER ===== */
+.unlock-divider {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin: 1.2rem auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 3;
+  opacity: 0;
+  transform: translateY(15px);
+  transition: all 0.6s 0.4s cubic-bezier(0.16,1,0.3,1);
 }
 
-/* TOTAL */
+.unlock-divider.vis { opacity: 1; transform: translateY(0); }
+.unlock-divider.hidden { display: none; }
+
+.unlock-line {
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(0,229,255,0.15), transparent);
+  margin-bottom: 1.2rem;
+}
+
+.unlock-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Space Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: transparent;
+  border: 1.5px solid rgba(0,229,255,0.25);
+  padding: 12px 32px;
+  border-radius: 100px;
+  cursor: none;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+
+.unlock-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(0,229,255,0.06), transparent);
+  opacity: 0;
+  transition: opacity 0.4s;
+  border-radius: 100px;
+}
+
+.unlock-btn:hover {
+  border-color: var(--accent);
+  transform: scale(1.04);
+  box-shadow: 0 0 30px rgba(0,229,255,0.15), 0 0 80px rgba(0,229,255,0.05);
+}
+
+.unlock-btn:hover::before { opacity: 1; }
+
+.unlock-btn .lock-anim {
+  display: inline-block;
+  transition: transform 0.3s;
+}
+
+.unlock-btn:hover .lock-anim { transform: rotate(-15deg); }
+
+.unlock-sub {
+  font-family: 'Space Mono', monospace;
+  font-size: 0.4rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #2a2a36;
+  margin-top: 0.8rem;
+}
+
+/* ===== TOTAL ===== */
 .total-section { text-align: center; position: relative; }
 
 .total-section::before {
@@ -495,7 +568,7 @@ section {
 
 .total-number {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(5rem, 18vw, 12rem);
+  font-size: clamp(4.5rem, 16vw, 10rem);
   line-height: 1;
   background: linear-gradient(135deg, var(--gold), #ffab00, #fff176, var(--gold));
   background-size: 300% 300%;
@@ -563,6 +636,32 @@ section {
 
 .stat-card:hover::before { opacity: 1; }
 
+/* Highlighted card */
+.stat-card.highlight {
+  border-color: rgba(0,230,118,0.35);
+  background: linear-gradient(135deg, rgba(0,230,118,0.06), var(--card) 60%);
+}
+
+.stat-card.highlight::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 17px;
+  background: linear-gradient(135deg, rgba(0,230,118,0.2), transparent 50%);
+  z-index: -1;
+  opacity: 0.5;
+}
+
+.stat-card.highlight .num {
+  color: var(--green);
+  text-shadow: 0 0 30px rgba(0,230,118,0.15);
+}
+
+.stat-card.highlight:hover {
+  border-color: rgba(0,230,118,0.5);
+  box-shadow: 0 20px 60px rgba(0,230,118,0.08), 0 0 40px rgba(0,230,118,0.05);
+}
+
 .stat-card .num {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 2.4rem;
@@ -581,13 +680,17 @@ section {
   z-index: 1;
 }
 
-/* CTA */
-.cta-section { text-align: center; min-height: 70vh; }
+.stat-card.highlight .lbl {
+  color: rgba(0,230,118,0.5);
+}
+
+/* ===== CTA ===== */
+.cta-section { text-align: center; min-height: 60vh; }
 
 .cta-question {
   font-family: 'Bebas Neue', sans-serif;
-  font-size: clamp(2.5rem, 8vw, 5rem);
-  letter-spacing: 3px;
+  font-size: clamp(3rem, 10vw, 6rem);
+  letter-spacing: 4px;
   line-height: 1.1;
   opacity: 0;
   transform: translateY(30px);
@@ -604,49 +707,28 @@ section {
 .cta-question .highlight::after {
   content: '';
   position: absolute;
-  bottom: 2px; left: 0;
+  bottom: 4px; left: 0;
   width: 100%; height: 4px;
   background: var(--accent);
-  opacity: 0.2;
+  opacity: 0.15;
   border-radius: 2px;
 }
 
-.cta-btn {
+.cta-blink {
   display: inline-block;
-  margin-top: 2.5rem;
-  font-family: 'Space Mono', monospace;
-  font-size: 0.7rem;
-  letter-spacing: 5px;
-  text-transform: uppercase;
-  color: var(--bg);
-  background: var(--text);
-  padding: 16px 50px;
-  text-decoration: none;
-  position: relative;
-  overflow: hidden;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.5s 0.2s cubic-bezier(0.16,1,0.3,1);
-}
-
-.cta-btn.vis { opacity: 1; transform: translateY(0); }
-
-.cta-btn::before {
-  content: '';
-  position: absolute;
-  top: 0; left: -100%;
-  width: 100%; height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(0,229,255,0.3), transparent);
-  transition: left 0.5s;
-}
-
-.cta-btn:hover {
+  width: 3px;
+  height: 0.8em;
   background: var(--accent);
-  transform: translateY(-2px) !important;
-  box-shadow: 0 10px 40px rgba(0,229,255,0.25);
+  margin-left: 4px;
+  vertical-align: baseline;
+  animation: blink 1s step-end infinite;
+  opacity: 0.7;
 }
 
-.cta-btn:hover::before { left: 100%; }
+@keyframes blink {
+  0%, 100% { opacity: 0.7; }
+  50% { opacity: 0; }
+}
 
 .cta-footer {
   font-family: 'Space Mono', monospace;
@@ -656,18 +738,36 @@ section {
   color: #222;
   margin-top: 3rem;
   opacity: 0;
-  transition: all 0.7s 0.5s ease-out;
+  transition: all 0.7s 0.3s ease-out;
 }
 
 .cta-footer.vis { opacity: 1; }
 
-/* ORBS */
+/* ===== ORBS ===== */
 .orb { position: fixed; border-radius: 50%; pointer-events: none; z-index: 0; filter: blur(80px); }
 .orb-1 { width: 300px; height: 300px; background: rgba(0,229,255,0.04); top: 10%; right: -100px; animation: orbFloat1 15s ease-in-out infinite; }
 .orb-2 { width: 250px; height: 250px; background: rgba(0,230,118,0.03); bottom: 20%; left: -80px; animation: orbFloat2 18s ease-in-out infinite; }
 .orb-3 { width: 200px; height: 200px; background: rgba(255,215,64,0.03); top: 50%; left: 50%; animation: orbFloat3 20s ease-in-out infinite; }
 
-/* KEYFRAMES */
+/* ===== FLASH ===== */
+.flash-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(0,229,255,0.1), transparent 70%);
+  z-index: 9997;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+
+.flash-overlay.active {
+  opacity: 1;
+  animation: flashPulse 1s ease-out forwards;
+}
+
+@keyframes flashPulse { 0% { opacity: 1; } 100% { opacity: 0; } }
+
+/* ===== KEYFRAMES ===== */
 @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes fadeUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
@@ -678,11 +778,10 @@ section {
 @keyframes goldShift { 0%, 100% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } }
 @keyframes scrollDrop { 0% { top: -100%; } 100% { top: 200%; } }
 @keyframes livePulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(0.8); } }
-@keyframes nextGlow { 0%, 100% { box-shadow: 0 0 15px rgba(0,229,255,0.15), 0 0 40px rgba(0,229,255,0.05); } 50% { box-shadow: 0 0 25px rgba(0,229,255,0.35), 0 0 80px rgba(0,229,255,0.12); } }
-@keyframes ringExpand { 0% { inset: -4px; opacity: 0.5; } 100% { inset: -18px; opacity: 0; } }
 @keyframes orbFloat1 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(-40px, 60px); } 66% { transform: translate(30px, -40px); } }
 @keyframes orbFloat2 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(50px, -30px); } 66% { transform: translate(-20px, 50px); } }
 @keyframes orbFloat3 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(-60px, -40px); } 66% { transform: translate(40px, 30px); } }
+@keyframes dotUnlock { 0% { transform: scale(1); } 40% { transform: scale(1.3); } 100% { transform: scale(1); } }
 
 /* MOBILE */
 @media (max-width: 600px) {
@@ -695,8 +794,8 @@ section {
   .t-item { gap: 0.8rem; }
   .stats-row { gap: 1rem; }
   .stat-card { padding: 1.2rem 1.5rem; }
-  .t-item.next-item { margin-left: -0.4rem; margin-right: -0.4rem; padding: 0.65rem 0.4rem; }
   .mouse-glow { display: none; }
+  .unlock-btn { font-size: 0.55rem; padding: 10px 24px; }
 }
 @media (max-width: 380px) {
   .hero h1 { font-size: clamp(3rem, 14vw, 5rem); }
@@ -713,118 +812,223 @@ section {
 <div class="orb orb-1"></div>
 <div class="orb orb-2"></div>
 <div class="orb orb-3"></div>
+<div class="flash-overlay" id="flash"></div>
 
-<!-- HERO -->
+<!-- ===== HERO ===== -->
 <section class="hero">
-  <div class="hero-badge"><span class="live-dot"></span>Collaboration Pitch 2025</div>
+  <div class="hero-badge"><span class="live-dot"></span>Samarbetsförslag 2025</div>
   <h1>REZDAR<span class="x">×</span><span class="mm">MMSPORTS</span></h1>
   <div class="hero-stat">
     <div class="number"><span class="counter" data-target="485000">0</span></div>
-    <div class="label">Followers on TikTok</div>
+    <div class="label">Följare på TikTok</div>
   </div>
   <div class="powered-section">
-    <div class="powered-label">Powered by</div>
+    <div class="powered-label">I samarbete med</div>
     <div class="brand-row">
       <div class="brand-pill">Red Bull</div>
       <div class="brand-pill">RevolutionRace</div>
       <div class="brand-pill current">MMSports</div>
     </div>
   </div>
-  <div class="scroll-cue"><span>Scroll</span><div class="scroll-line"></div></div>
+  <div class="scroll-cue"><span>Scrolla</span><div class="scroll-line"></div></div>
 </section>
 
-<!-- TIMELINE -->
+<!-- ===== TIMELINE ===== -->
 <section class="timeline-section">
   <div class="section-header">
-    <h2 data-reveal>The Roadmap</h2>
-    <div class="sub" data-reveal>10 Collabs · Jan–Nov</div>
+    <h2 data-reveal>Planen</h2>
+    <div class="sub" data-reveal>10 Avsnitt · Jan–Nov</div>
   </div>
   <div class="timeline" id="timeline">
     <div class="timeline-fill" id="timelineFill"></div>
+
+    <!-- DONE -->
     <div class="t-item" data-delay="0">
       <div class="t-dot-wrap"><div class="t-dot done">✓</div></div>
-      <div class="t-info"><div class="t-month">Januari</div><div class="t-title">Collab #1</div></div>
+      <div class="t-info">
+        <div class="t-month">Januari</div>
+        <div class="t-title">Ep. 1 — "Resan börjar!"</div>
+      </div>
       <div class="t-views green">564K</div>
     </div>
+
     <div class="t-item" data-delay="1">
       <div class="t-dot-wrap"><div class="t-dot done">✓</div></div>
-      <div class="t-info"><div class="t-month">Februari</div><div class="t-title">Collab #2</div></div>
+      <div class="t-info">
+        <div class="t-month">Februari</div>
+        <div class="t-title">Ep. 2 — "Tog PB i bänk!"</div>
+      </div>
       <div class="t-views green">565K</div>
     </div>
-    <div class="t-item next-item" data-delay="2">
-      <div class="t-dot-wrap"><div class="t-dot next">3</div></div>
-      <div class="t-info"><div class="t-month">Mars</div><div class="t-title">Collab #3</div></div>
-      <div class="t-views cyan">Unlock →</div>
-    </div>
-    <div class="t-item" data-delay="3">
+  </div>
+
+  <!-- ===== UNLOCK DIVIDER (between done & locked) ===== -->
+  <div class="unlock-divider" id="unlockDivider">
+    <div class="unlock-line"></div>
+    <button class="unlock-btn" id="unlockBtn" onclick="unlockAll()">
+      <span class="lock-anim">🔒</span>
+      Visa hela resan
+    </button>
+    <div class="unlock-sub">8 avsnitt kvar att låsa upp</div>
+  </div>
+
+  <!-- LOCKED TIMELINE (separate so button sits between) -->
+  <div class="timeline" id="timelineLocked">
+
+    <div class="t-item lockable" data-delay="0" data-num="3" data-title='Ep. 3 — "Kör hårt, ät rätt"' data-range="400–550K">
       <div class="t-dot-wrap"><div class="t-dot locked">🔒</div></div>
-      <div class="t-info"><div class="t-month">April</div><div class="t-title locked-text">Collab #4</div></div>
+      <div class="t-info">
+        <div class="t-month">Mars</div>
+        <div class="t-title locked-text">Ep. 3 — Låst</div>
+      </div>
       <div class="t-views locked-v">—</div>
     </div>
+
+    <div class="t-item lockable" data-delay="1" data-num="4" data-title='Ep. 4 — "Marklyft med Rezdar"' data-range="400–550K">
+      <div class="t-dot-wrap"><div class="t-dot locked">🔒</div></div>
+      <div class="t-info">
+        <div class="t-month">April</div>
+        <div class="t-title locked-text">Ep. 4 — Låst</div>
+      </div>
+      <div class="t-views locked-v">—</div>
+    </div>
+
+    <div class="t-item lockable" data-delay="2" data-num="5" data-title='Ep. 5 — "Utmaning: 30 dagar"' data-range="400–550K">
+      <div class="t-dot-wrap"><div class="t-dot locked">🔒</div></div>
+      <div class="t-info">
+        <div class="t-month">Maj</div>
+        <div class="t-title locked-text">Ep. 5 — Låst</div>
+      </div>
+      <div class="t-views locked-v">—</div>
+    </div>
+
+    <div class="t-item lockable" data-delay="3" data-num="6" data-title='Ep. 6 — "Sommarformen"' data-range="400–550K">
+      <div class="t-dot-wrap"><div class="t-dot locked">🔒</div></div>
+      <div class="t-info">
+        <div class="t-month">Juni</div>
+        <div class="t-title locked-text">Ep. 6 — Låst</div>
+      </div>
+      <div class="t-views locked-v">—</div>
+    </div>
+
     <div class="t-item" data-delay="4">
-      <div class="t-dot-wrap"><div class="t-dot locked">🔒</div></div>
-      <div class="t-info"><div class="t-month">Maj</div><div class="t-title locked-text">Collab #5</div></div>
-      <div class="t-views locked-v">—</div>
-    </div>
-    <div class="t-item" data-delay="5">
-      <div class="t-dot-wrap"><div class="t-dot locked">🔒</div></div>
-      <div class="t-info"><div class="t-month">Juni</div><div class="t-title locked-text">Collab #6</div></div>
-      <div class="t-views locked-v">—</div>
-    </div>
-    <div class="t-item" data-delay="6">
-      <div class="t-dot-wrap"><div class="t-dot pause">PAUS</div></div>
-      <div class="t-info"><div class="t-month">Juli</div><div class="t-title pause-text">Sommaruppehåll</div></div>
+      <div class="t-dot-wrap"><div class="t-dot pause">—</div></div>
+      <div class="t-info">
+        <div class="t-month">Juli</div>
+        <div class="t-title pause-text">Sommaruppehåll</div>
+      </div>
       <div class="t-views locked-v"></div>
     </div>
-    <div class="t-item" data-delay="7">
+
+    <div class="t-item lockable" data-delay="5" data-num="7" data-title='Ep. 7 — "Tillbaka starkare"' data-range="400–550K">
       <div class="t-dot-wrap"><div class="t-dot locked">🔒</div></div>
-      <div class="t-info"><div class="t-month">Augusti</div><div class="t-title locked-text">Collab #7</div></div>
+      <div class="t-info">
+        <div class="t-month">Augusti</div>
+        <div class="t-title locked-text">Ep. 7 — Låst</div>
+      </div>
       <div class="t-views locked-v">—</div>
     </div>
-    <div class="t-item" data-delay="8">
+
+    <div class="t-item lockable" data-delay="6" data-num="8" data-title='Ep. 8 — "Gymmet vs naturen"' data-range="400–550K">
       <div class="t-dot-wrap"><div class="t-dot locked">🔒</div></div>
-      <div class="t-info"><div class="t-month">September</div><div class="t-title locked-text">Collab #8</div></div>
+      <div class="t-info">
+        <div class="t-month">September</div>
+        <div class="t-title locked-text">Ep. 8 — Låst</div>
+      </div>
       <div class="t-views locked-v">—</div>
     </div>
+
+    <div class="t-item lockable" data-delay="7" data-num="9" data-title='Ep. 9 — "Höstgrind"' data-range="400–550K">
+      <div class="t-dot-wrap"><div class="t-dot locked">🔒</div></div>
+      <div class="t-info">
+        <div class="t-month">Oktober</div>
+        <div class="t-title locked-text">Ep. 9 — Låst</div>
+      </div>
+      <div class="t-views locked-v">—</div>
+    </div>
+
+    <div class="t-item lockable" data-delay="8" data-num="10" data-title='Ep. 10 — "Årets resa — avslut"' data-range="400–550K">
+      <div class="t-dot-wrap"><div class="t-dot locked">🔒</div></div>
+      <div class="t-info">
+        <div class="t-month">November</div>
+        <div class="t-title locked-text">Ep. 10 — Låst</div>
+      </div>
+      <div class="t-views locked-v">—</div>
+    </div>
+
     <div class="t-item" data-delay="9">
-      <div class="t-dot-wrap"><div class="t-dot locked">🔒</div></div>
-      <div class="t-info"><div class="t-month">Oktober</div><div class="t-title locked-text">Collab #9</div></div>
-      <div class="t-views locked-v">—</div>
-    </div>
-    <div class="t-item" data-delay="10">
-      <div class="t-dot-wrap"><div class="t-dot locked">🔒</div></div>
-      <div class="t-info"><div class="t-month">November</div><div class="t-title locked-text">Collab #10</div></div>
-      <div class="t-views locked-v">—</div>
-    </div>
-    <div class="t-item" data-delay="11">
-      <div class="t-dot-wrap"><div class="t-dot pause">PAUS</div></div>
-      <div class="t-info"><div class="t-month">December</div><div class="t-title pause-text">Juluppehåll</div></div>
+      <div class="t-dot-wrap"><div class="t-dot pause">—</div></div>
+      <div class="t-info">
+        <div class="t-month">December</div>
+        <div class="t-title pause-text">Juluppehåll</div>
+      </div>
       <div class="t-views locked-v"></div>
     </div>
   </div>
 </section>
 
-<!-- TOTAL -->
+<!-- ===== TOTAL ===== -->
 <section class="total-section">
-  <div class="total-label" data-reveal>Projected Total Views</div>
-  <div class="total-number" data-reveal>5.6M+</div>
-  <div class="total-sub" data-reveal>10 posts · 12 months · 1 partner</div>
+  <div class="total-label" data-reveal>Uppskattad total räckvidd</div>
+  <div class="total-number" data-reveal>4.5–5.5M</div>
+  <div class="total-sub" data-reveal>10 inlägg · 12 månader · 1 partner</div>
   <div class="stats-row">
-    <div class="stat-card" data-reveal><div class="num">10</div><div class="lbl">Posts</div></div>
-    <div class="stat-card" data-reveal><div class="num">485K</div><div class="lbl">Followers</div></div>
-    <div class="stat-card" data-reveal><div class="num">~560K</div><div class="lbl">Avg Views / Post</div></div>
+    <div class="stat-card" data-reveal><div class="num">10</div><div class="lbl">Inlägg</div></div>
+    <div class="stat-card" data-reveal><div class="num">485K</div><div class="lbl">Följare</div></div>
+    <div class="stat-card highlight" data-reveal><div class="num">1.1M</div><div class="lbl">Redan levererat</div></div>
   </div>
 </section>
 
-<!-- CTA -->
+<!-- ===== CTA ===== -->
 <section class="cta-section">
-  <div class="cta-question" data-reveal>Ready to<br><span class="highlight">unlock</span> #3?</div>
-  <a href="mailto:rezdar@example.com" class="cta-btn" data-reveal>Let's Go</a>
+  <div class="cta-question" data-reveal>
+    <span class="highlight">Fortsätta?</span><span class="cta-blink"></span>
+  </div>
   <div class="cta-footer" data-reveal>Rezdar × MMSports · 2025</div>
 </section>
 
 <script>
-// PARTICLE SYSTEM
+// ===== UNLOCK =====
+let isUnlocked = false;
+
+function unlockAll() {
+  if (isUnlocked) return;
+  isUnlocked = true;
+
+  // Flash
+  const flash = document.getElementById('flash');
+  flash.classList.add('active');
+  setTimeout(() => flash.classList.remove('active'), 1000);
+
+  // Collapse divider
+  const divider = document.getElementById('unlockDivider');
+  divider.style.opacity = '0';
+  divider.style.transform = 'scale(0.95)';
+  setTimeout(() => divider.style.display = 'none', 400);
+
+  // Unlock each lockable
+  const items = document.querySelectorAll('.t-item.lockable');
+  items.forEach((item, i) => {
+    setTimeout(() => {
+      const dot = item.querySelector('.t-dot');
+      const title = item.querySelector('.t-title');
+      const views = item.querySelector('.t-views');
+
+      dot.className = 't-dot unlocked';
+      dot.textContent = item.dataset.num;
+      dot.style.animation = 'dotUnlock 0.4s ease-out';
+
+      title.className = 't-title';
+      title.textContent = item.dataset.title;
+      title.style.color = 'var(--text)';
+
+      views.className = 't-views cyan';
+      views.textContent = item.dataset.range;
+    }, i * 120);
+  });
+}
+
+// ===== PARTICLES =====
 const canvas = document.getElementById('particleCanvas');
 const ctx = canvas.getContext('2d');
 let W, H, particles = [], mouse = { x: -1000, y: -1000 };
@@ -902,28 +1106,24 @@ function animate() {
 }
 animate();
 
-// CURSOR
+// ===== CURSOR =====
 const cursorEl = document.getElementById('cursor');
 const cursorDot = document.getElementById('cursorDot');
 const mouseGlow = document.getElementById('mouseGlow');
 
 document.addEventListener('mousemove', e => {
-  mouse.x = e.clientX;
-  mouse.y = e.clientY;
-  cursorEl.style.left = e.clientX + 'px';
-  cursorEl.style.top = e.clientY + 'px';
-  cursorDot.style.left = e.clientX + 'px';
-  cursorDot.style.top = e.clientY + 'px';
-  mouseGlow.style.left = e.clientX + 'px';
-  mouseGlow.style.top = e.clientY + 'px';
+  mouse.x = e.clientX; mouse.y = e.clientY;
+  cursorEl.style.left = e.clientX + 'px'; cursorEl.style.top = e.clientY + 'px';
+  cursorDot.style.left = e.clientX + 'px'; cursorDot.style.top = e.clientY + 'px';
+  mouseGlow.style.left = e.clientX + 'px'; mouseGlow.style.top = e.clientY + 'px';
 });
 
-document.querySelectorAll('.brand-pill, .cta-btn, .stat-card, .t-item').forEach(el => {
+document.querySelectorAll('.brand-pill, .stat-card, .t-item, .unlock-btn').forEach(el => {
   el.addEventListener('mouseenter', () => cursorEl.classList.add('hover'));
   el.addEventListener('mouseleave', () => cursorEl.classList.remove('hover'));
 });
 
-// COUNTER
+// ===== COUNTER =====
 function animateCounter(el) {
   const target = parseInt(el.dataset.target);
   const duration = 2000;
@@ -937,12 +1137,12 @@ function animateCounter(el) {
   requestAnimationFrame(tick);
 }
 
-// OBSERVERS
+// ===== OBSERVERS =====
 const revealObs = new IntersectionObserver((entries) => {
   entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('vis'); });
 }, { threshold: 0.2 });
 
-document.querySelectorAll('[data-reveal], .section-header h2, .section-header .sub, .total-label, .total-number, .total-sub, .stat-card, .cta-question, .cta-btn, .cta-footer').forEach(el => revealObs.observe(el));
+document.querySelectorAll('[data-reveal], .section-header h2, .section-header .sub, .total-label, .total-number, .total-sub, .stat-card, .cta-question, .cta-footer, .unlock-divider').forEach(el => revealObs.observe(el));
 
 const heroObs = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
@@ -954,14 +1154,21 @@ const heroObs = new IntersectionObserver((entries) => {
 }, { threshold: 0.5 });
 document.querySelectorAll('.hero-stat').forEach(el => heroObs.observe(el));
 
+// Done items
 const tlObs = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
     if (entry.isIntersecting) {
-      document.querySelectorAll('.t-item').forEach((item, i) => {
+      const tl = document.getElementById('timeline');
+      tl.querySelectorAll('.t-item').forEach((item, i) => {
         setTimeout(() => item.classList.add('vis'), i * 100);
       });
+      // Fill line to end of done items
       setTimeout(() => {
-        document.getElementById('timelineFill').style.height = (document.getElementById('timeline').scrollHeight * 0.155) + 'px';
+        const items = tl.querySelectorAll('.t-item');
+        const lastDone = items[items.length - 1];
+        const tlRect = tl.getBoundingClientRect();
+        const itemRect = lastDone.getBoundingClientRect();
+        document.getElementById('timelineFill').style.height = ((itemRect.top + itemRect.height / 2) - tlRect.top + 22) + 'px';
       }, 400);
       tlObs.disconnect();
     }
@@ -969,7 +1176,20 @@ const tlObs = new IntersectionObserver((entries) => {
 }, { threshold: 0.1 });
 tlObs.observe(document.getElementById('timeline'));
 
-// PARALLAX
+// Locked items
+const tlLockedObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      document.getElementById('timelineLocked').querySelectorAll('.t-item').forEach((item, i) => {
+        setTimeout(() => item.classList.add('vis'), i * 100);
+      });
+      tlLockedObs.disconnect();
+    }
+  });
+}, { threshold: 0.05 });
+tlLockedObs.observe(document.getElementById('timelineLocked'));
+
+// ===== PARALLAX =====
 window.addEventListener('scroll', () => {
   const s = window.scrollY;
   document.querySelector('.orb-1').style.transform = `translate(${Math.sin(s*0.002)*30}px, ${s*0.08}px)`;
